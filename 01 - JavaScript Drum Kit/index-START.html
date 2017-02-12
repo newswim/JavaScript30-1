@@ -59,6 +59,33 @@
 
 <script>
 
+const find = document.querySelector.bind(document)
+const findAll = document.querySelectorAll.bind(document)
+const keys = findAll('.key')
+
+function removeTransition (event) {
+  if (event.propertyName != 'transform') return; // skip it.
+
+  // this == key
+  // because we called addEventListener from key
+  this.classList.remove('playing')
+}
+
+function playSound (event) {
+  const audio = find(`audio[data-key="${event.keyCode}"]`)
+  const key = find(`.key[data-key="${event.keyCode}"]`)
+
+  if (!audio) return;       // just stop the function
+
+  audio.currentTime = 0; // rewind .wav to start
+  audio.play()
+  key.classList.add('playing')
+}
+
+keys.forEach(key => key.addEventListener('transitionend', removeTransition))
+
+window.addEventListener('keydown', playSound)
+
 </script>
 
 
